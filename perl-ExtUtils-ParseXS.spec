@@ -2,12 +2,15 @@ Name:           perl-ExtUtils-ParseXS
 # Epoch to compete with perl.spec
 Epoch:          1
 Version:        3.18
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Module and a script for converting Perl XS code into C code
 License:        GPL+ or Artistic
 Group:          Development/Libraries
 URL:            http://search.cpan.org/dist/ExtUtils-ParseXS/
 Source0:        http://www.cpan.org/authors/id/S/SM/SMUELLER/ExtUtils-ParseXS-%{version}.tar.gz
+# Improve compatibility with C++, CPAN RT#86367, bug #1078438,
+# in upstream 3.18_03
+Patch0:         ExtUtils-ParseXS-3.18-EU-ParseXS-Attempt-to-canonicalize-C-types-in-tidy_t.patch
 BuildArch:      noarch
 BuildRequires:  perl
 BuildRequires:  perl(Config)
@@ -45,6 +48,7 @@ the glue necessary to let Perl access those functions.
 
 %prep
 %setup -q -n ExtUtils-ParseXS-%{version}
+%patch0 -p1
 
 %build
 perl Makefile.PL INSTALLDIRS=vendor
@@ -69,6 +73,9 @@ make test
 %{_mandir}/man3/*
 
 %changelog
+* Thu Mar 20 2014 Petr Pisar <ppisar@redhat.com> - 1:3.18-3
+- Improve compatibility with C++ (bug #1078438)
+
 * Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1:3.18-2
 - Mass rebuild 2013-12-27
 
